@@ -1,4 +1,4 @@
-![MakeIcon icon](Resources/MakeIcon-64.png)
+![MakeIcon icon](Resources/Header.svg)
 
 This is a simple application to build Windows 10 compatible ICO icon files from multiple PNG image files.
 
