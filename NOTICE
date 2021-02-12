@@ -1,0 +1,28 @@
+WHY DID I CHANGE LICENSE FROM MIT TO APACHE?
+
+MIT is one of the most permissive free software licences. Basically, you can do
+whatever you want with a software licensed under the MIT license, as long as you
+add a copy of the original MIT license and copyright notice to it.
+
+The Apache License is also a permissive license, nearly identical in terms of
+what you can and cannot do, just more heavily "lawyered" and significantly more
+verbose. However, there are three points it clearly states that were significant
+to us:
+
+  (1) that you cannot use names and marks of the original software (the app name,
+      contributor names, icons, etc.) in any way that could lead others to
+      believe that your distribution is endorsed by the us;
+
+  (2) that any contribution intentionally submitted for inclusion in this
+      project shall be under this same license without additional terms or
+      conditions; and
+
+  (3) that if you provide a modified version of this project you are required to
+      keep a notice file (like this one) listing out all the modifications you
+      have done in your version compared to the original software.
+
+Apart from that, you can do anything with the software, including (but not
+limited to) sublicensing, use a modified version for private purposes, and even
+embed parts of the source in another product, all provided you retain any
+original copyright notices and a copy of the Apache License related to this
+work.

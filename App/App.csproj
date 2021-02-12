@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>MakeIcon</AssemblyName>
+    <RootNamespace>Lmpessoa.MakeIcon</RootNamespace>
+    <Version>2.0.0</Version>
+    <Authors>Leonardo Pessoa</Authors>
+    <NeutralLanguage>en-gb</NeutralLanguage>
+    <PackageProjectUrl>https://www.github.com/Lmpessoa/MakeIcon/</PackageProjectUrl>
+    <RepositoryUrl>https://www.github.com/Lmpessoa/MakeIcon/</RepositoryUrl>
+    <Description>A simple application to build Windows 10 compatible ICO icon files from multiple PNG image files.</Description>
+    <Copyright>Copyright © 2019 Leonardo Pessoa</Copyright>
+    <ApplicationIcon>..\Resources\MakeIcon.ico</ApplicationIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>MakeIcon.ico</PackageIcon>
+    <PackageTags>icons windows-10 ico</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Lmpessoa.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="help-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\Resources\MakeIcon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="help-icon.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,54 +1,54 @@
 ﻿/*
  * Copyright (c) 2019 Leonardo Pessoa
- * https://lmpessoa.com
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 
 namespace Lmpessoa.MakeIcon {
 
-   class Icon {
+   internal sealed class Icon {
 
-      private List<Bitmap> images = new List<Bitmap>();
+      private static readonly int[] validSizes = new int[] { 16, 32, 48, 64, 128, 256 };
+      private readonly Dictionary<int, Bitmap> images = new Dictionary<int, Bitmap>();
 
       internal void Add(Bitmap image) {
          if (image.Width != image.Height) {
-            throw new Exception("Icon images must have same width and height");
+            throw new BadImageFormatException("Icon images must have same width and height");
          }
-         if (image.Width > 256) {
-            throw new Exception($"Image size is not supported in ICO format: {image.Width}x{image.Height}");
+         if (!validSizes.Contains(image.Width)) {
+            throw new BadImageFormatException($"Image size is not supported in ICO format: {image.Width}x{image.Height}");
          }
          if (image.PixelFormat != PixelFormat.Format32bppArgb) {
-            throw new Exception($"Unsupported format for icon: {image.PixelFormat.ToString()}");
+            throw new BadImageFormatException($"Unsupported format for icon: {image.PixelFormat}");
          }
-         foreach (Bitmap bmp in images) {
-            if (bmp.Width == image.Width) {
-               throw new Exception($"This icon already has an image {image.Width}x{image.Height}");
-            }
-         }
-         images.Add(image);
+         images[image.Width] = image;
       }
+
+      internal void Remove(int size) {
+         if (images.ContainsKey(size)) {
+            images.Remove(size);
+         }
+      }
+
+      internal int Count => images.Count;
+
+      internal Bitmap this[int size] => images[size];
 
       internal void SaveTo(string filename) {
          Bitmap[] images = GetSortedImages();
@@ -56,8 +56,8 @@ namespace Lmpessoa.MakeIcon {
          FileStream file = File.OpenWrite(filename);
          file.SetLength(0);
          using (BinaryWriter icon = new BinaryWriter(file)) {
-            icon.Write((UInt32) 0x00010000);
-            icon.Write((UInt16) images.Length);
+            icon.Write((uint) 0x00010000);
+            icon.Write((ushort) images.Length);
             int offset = (images.Length * 16) + 6;
             for (int i = 0; i < images.Length; ++i) {
                Bitmap image = images[i];
@@ -77,7 +77,7 @@ namespace Lmpessoa.MakeIcon {
       }
 
       private Bitmap[] GetSortedImages() {
-         List<Bitmap> images = new List<Bitmap>(this.images);
+         List<Bitmap> images = new List<Bitmap>(this.images.Values);
          images.Sort((b1, b2) => b2.Width - b1.Width);
          return images.ToArray();
       }
@@ -136,19 +136,14 @@ namespace Lmpessoa.MakeIcon {
       }
 
       private byte BitsPerPixel(PixelFormat format) {
-         switch (format) {
-            case PixelFormat.Format1bppIndexed:
-               return 1;
-            case PixelFormat.Format4bppIndexed:
-               return 4;
-            case PixelFormat.Format8bppIndexed:
-               return 8;
-            case PixelFormat.Format24bppRgb:
-               return 24;
-            case PixelFormat.Format32bppArgb:
-               return 32;
-         }
-         return 0;
+         return format switch {
+            PixelFormat.Format1bppIndexed => 1,
+            PixelFormat.Format4bppIndexed => 4,
+            PixelFormat.Format8bppIndexed => 8,
+            PixelFormat.Format24bppRgb => 24,
+            PixelFormat.Format32bppArgb => 32,
+            _ => 0,
+         };
       }
    }
 }

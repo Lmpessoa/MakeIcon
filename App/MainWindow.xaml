@@ -1,0 +1,85 @@
+﻿<Window x:Class="Lmpessoa.MakeIcon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lmpessoa.MakeIcon"
+        mc:Ignorable="d"
+        x:ClassModifier="internal"
+        Title="MainWindow" Height="400" Width="470"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        AllowDrop="True" ResizeMode="CanMinimize"
+        Background="{DynamicResource WindowBorder}" Drop="Window_DropFiles" DragOver="Window_DragOver">
+   <Window.Resources>
+      <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Resources/SystemButtonStyles.xaml"/>
+            <ResourceDictionary Source="Resources/MainWindowStyles.xaml"/>
+         </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+   </Window.Resources>
+   <Window.InputBindings>
+      <KeyBinding Modifiers="Ctrl" Key="S" Command="{x:Static local:MainWindow.SaveAsCommand}"/>
+      <KeyBinding Key="Delete" Command="{x:Static local:MainWindow.RemoveImageCommand}"/>
+      <KeyBinding Key="Esc" Command="{x:Static local:MainWindow.ClearSelectionCommand}"/>
+      <KeyBinding Key="Tab" Command="{x:Static local:MainWindow.SelectNextCommand}"/>
+   </Window.InputBindings>
+   <Window.CommandBindings>
+      <CommandBinding Command="{x:Static local:MainWindow.ClearSelectionCommand}" Executed="ClearSelection"/>
+      <CommandBinding Command="{x:Static local:MainWindow.RemoveImageCommand}" Executed="RemoveSelection"/>
+      <CommandBinding Command="{x:Static local:MainWindow.SelectNextCommand}" Executed="SelectNext"/>
+      <CommandBinding Command="{x:Static local:MainWindow.SaveAsCommand}" Executed="SaveAs_Click"/>
+   </Window.CommandBindings>
+   <DockPanel Margin="1" Background="{DynamicResource WindowBackground}">
+      <DockPanel DockPanel.Dock="Top" Height="34">
+         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Button Style="{StaticResource SystemButton}" Content="&#xEF3C;" ToolTip="Change Theme" Click="ChangeTheme_Click"/>
+            <Button Style="{StaticResource SystemButton}" Content="&#xE921;" FontSize="9" ToolTip="Minimize" Click="Minimize_Click"/>
+            <Button Style="{StaticResource CloseSystemButton}" Content="&#xE711;" FontSize="12" ToolTip="Close" Click="Close_Click"/>
+         </StackPanel>
+         <Label MouseLeftButtonDown="TitlePanel_MouseLeftButtonDown"/>
+      </DockPanel>
+      <Button Style="{StaticResource SaveAsButton}" DockPanel.Dock="Bottom" Content="Save as..." HorizontalAlignment="Stretch" Height="24" Click="SaveAs_Click"/>
+      <Grid ScrollViewer.VerticalScrollBarVisibility="Disabled">
+         <Label Content="256 x 256" HorizontalAlignment="Left" Margin="118,256,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon256}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon256" Style="{StaticResource Icon}" Margin="10,0,0,0" Height="256" Width="256"
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <Label Content="128 x 128" HorizontalAlignment="Left" Margin="364,145,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon128}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon128" Style="{StaticResource Icon}" Margin="330,17,0,0" Height="128" Width="128"
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <Label Content="64 x 64" HorizontalAlignment="Left" Margin="298,230,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon64}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon64" Style="{StaticResource Icon}" Margin="290,167,0,0" Height="64" Width="64"
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <Label Content="48 x 48" HorizontalAlignment="Left" Margin="384,230,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon48}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon48" Style="{StaticResource Icon}" Margin="384,182,0,0" Height="48" Width="48" 
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <Label Content="32 x 32" HorizontalAlignment="Left" Margin="363,292,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon32}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon32" Style="{StaticResource Icon}" Margin="371,260,0,0" Height="32" Width="32" 
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <Label Content="16 x 16" HorizontalAlignment="Left" Margin="309,310,0,0" VerticalAlignment="Top"
+                Tag="{x:Reference Icon16}" MouseLeftButtonDown="Label_Click"/>
+         <Button x:Name="Icon16" Style="{StaticResource Icon}" Margin="325,294,0,0" Height="16" Width="16" 
+                 BorderBrush="{DynamicResource IconBorder}" Click="ImageSelect" IsTabStop="False" Focusable="False"/>
+
+         <TextBlock x:Name="HelpTip" FontSize="11" TextWrapping="Wrap" Margin="0,0,178,33" Background="{DynamicResource {x:Static SystemColors.InfoBrushKey}}"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="272" Padding="10,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden">
+            Drag the desired PNG images files onto this window to add them to your icon and press the "Save as..." button below to save it to as an ICO file.
+            <LineBreak/><LineBreak/>
+            You can also remove an image previously included from the icon by clicking on a desired image and pressing the DELETE key.
+         </TextBlock>
+         <Image Margin="10,310,433,5" Stretch="Uniform" Source="help-icon.png" Width="25" Height="25" MouseLeave="Help_MouseLeave" MouseEnter="Help_MouseEnter"/>
+      </Grid>
+   </DockPanel>
+</Window>
