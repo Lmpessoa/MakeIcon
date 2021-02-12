@@ -1,4 +1,4 @@
-![MakeIcon icon](Resources/Header.svg | width=500)
+<img alt="MakeIcon icon" src="Resources/Header.svg" height="150">
 
 This is a simple application to build Windows 10 compatible ICO icon files from multiple PNG image files.
 
